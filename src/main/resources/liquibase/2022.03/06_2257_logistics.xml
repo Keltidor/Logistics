@@ -1,0 +1,82 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+                   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                   xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.4.xsd">
+
+    <changeSet id="2022-03-06_2257" author="Vyacheslav Korostelev"
+               logicalFilePath="/liquibase/2022/03/06_2257_logistics.xml">
+
+        <createTable tableName="cars" schemaName="public">
+            <column name="id" type="BIGINT">
+                <constraints primaryKey="true" nullable="false" primaryKeyName="pk_id_cars"/>
+            </column>
+            <column name="car_type" type="VARCHAR(255)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="date_of_creation" type="TIMESTAMP">
+                <constraints nullable="false"/>
+            </column>
+            <column name="driver_id" type="BIGINT">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+
+
+        <createTable tableName="drivers" schemaName="public">
+            <column name="driver_id" type="BIGINT">
+                <constraints primaryKey="true" nullable="false" primaryKeyName="pk_id_drivers"/>
+            </column>
+            <column name="date_of_birth" type="TIMESTAMP">
+                <constraints nullable="false"/>
+            </column>
+            <column name="email" type="VARCHAR(255)">
+                <constraints nullable="false" unique="true"/>
+            </column>
+            <column name="first_name" type="VARCHAR(255)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="last_name" type="VARCHAR(255)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="middle_name" type="VARCHAR(255)"/>
+            <column name="phone" type="INT(11)">
+                <constraints nullable="false" unique="true"/>
+            </column>
+            <column name="drivers_license_id" type="BIGINT"/>
+        </createTable>
+
+
+        <createTable tableName="drivers_licenses" schemaName="public">
+            <column name="drivers_license_id" type="BIGINT">
+                <constraints primaryKey="true" nullable="false" primaryKeyName="pk_id_drivers_license"/>
+            </column>
+            <column name="date_of_expiry" type="TIMESTAMP">
+                <constraints nullable="false"/>
+            </column>
+            <column name="date_of_issue" type="TIMESTAMP">
+                <constraints nullable="false"/>
+            </column>
+            <column name="license_type" type="VARCHAR(255)">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+
+
+        <addForeignKeyConstraint baseTableSchemaName="public"
+                                 baseTableName="cars" baseColumnNames="driver_id"
+                                 constraintName="fk_cars_driver_id_drivers_driver_id"
+                                 referencedTableSchemaName="public"
+                                 referencedTableName="drivers"
+                                 referencedColumnNames="driver_id"
+                                 onUpdate="CASCADE"/>
+
+        <addForeignKeyConstraint baseTableSchemaName="public"
+                                 baseTableName="drivers" baseColumnNames="drivers_license_id"
+                                 constraintName="fk_drivers_drivers_license_id_drivers_license_drivers_license_id"
+                                 referencedTableSchemaName="public"
+                                 referencedTableName="drivers_licenses"
+                                 referencedColumnNames="drivers_license_id"
+                                 onUpdate="CASCADE"/>
+
+    </changeSet>
+</databaseChangeLog>
